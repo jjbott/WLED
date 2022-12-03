@@ -652,7 +652,7 @@ void WLED::initConnection()
 
   DEBUG_PRINT(F("Connecting to "));
   DEBUG_PRINT(clientSSID);
-  DEBUG_PRINTLN("...");
+  DEBUG_PRINT("...");
 
   // convert the "serverDescription" into a valid DNS hostname (alphanumeric)
   char hostname[25] = "wled-";
@@ -663,6 +663,13 @@ void WLED::initConnection()
 #endif
 
   WiFi.begin(clientSSID, clientPass);
+
+  while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        DEBUG_PRINT(".");
+    }
+  
+  DEBUG_PRINTLN("");
 
 #ifdef ARDUINO_ARCH_ESP32
   WiFi.setSleep(!noWifiSleep);
