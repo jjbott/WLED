@@ -43,7 +43,7 @@ void handleDDPPacket(e131_packet_t* p) {
 
   bool push = p->flags & DDP_PUSH_FLAG;
   if (push) {
-    e131NewData = true;
+    //e131NewData = true;
     byte sn = p->sequenceNum & 0xF;
     if (sn) e131LastSequenceNumber[0] = sn;
   }
@@ -82,6 +82,10 @@ void handleE131Packet(e131_packet_t* p, IPAddress clientIP, byte protocol){
     dmx.update();
   }
   #endif
+
+  if ( uni == 63999) {
+    e131NewData = true;
+  }
 
   // only listen for universes we're handling & allocated memory
   if (uni >= (e131Universe + E131_MAX_UNIVERSE_COUNT)) return;
@@ -222,6 +226,4 @@ void handleE131Packet(e131_packet_t* p, IPAddress clientIP, byte protocol){
       return;  // nothing to do
       break;
   }
-
-  e131NewData = true;
 }

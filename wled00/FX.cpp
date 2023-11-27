@@ -26,6 +26,7 @@
 
 #include "FX.h"
 #include "wled.h"
+#include "palettes.h"
 
 #define IBN 5100
 #define PALETTE_SOLID_WRAP (paletteBlend == 1 || paletteBlend == 3)
@@ -2535,67 +2536,24 @@ uint16_t WS2812FX::mode_halloween_eyes()
 }
 
 
-// Rainbow Palette from other xmas light project
-/*
-CRGB rainbowPalette[
-  CRGB(255,0,0),
-  CRGB(0,0,255)
-];
-*/
+uint16_t WS2812FX::mode_static_xmas()
+{  
+  // Hardcoding to use my own pallette. Using other palletes was too much work for 2022. 
+  // Most are gradient pallettes, where there arent really meant to be distinct colors.
+  for (uint16_t i = 0; i < SEGLEN; i++) 
+  {
+    uint16_t paletteIndex = (i % 6) * 2;
 
-const uint8_t rainbowPalette[] PROGMEM = {
-  255,0,0, // R
-  0,0,255, // B
-  255,128,0, // Y
-  178,0,255, // V
-  255,55,0, // O
-  0,255,0 // G
-};
+    setPixelColor(i, R(xmas_rainbow[paletteIndex]), G(xmas_rainbow[paletteIndex]), B(xmas_rainbow[paletteIndex]));
+  }
+
+  return FRAMETIME;
+}
 
 
 //Speed slider sets amount of LEDs lit, intensity sets unlit
 uint16_t WS2812FX::mode_static_pattern()
 {
-  for (uint16_t i = 0; i < SEGLEN; i++) {
-    //uint16_t paletteIndex = (i % 2) * 3;
-
-    switch (i%6)
-    {
-      case 0:
-        setPixelColor(i, 255, 0, 0);
-        break;
-      case 1:
-        setPixelColor(i, 0, 0, 255);
-        break;
-      case 2:
-        setPixelColor(i, 255, 128, 0);
-        break;
-      case 3:
-        setPixelColor(i, 178, 0, 255);
-        break;
-      case 4:
-        setPixelColor(i, 255, 155, 0);
-        break;
-      case 5:
-        setPixelColor(i, 0, 255, 0);
-        break;
-    }
-
-    //setPixelColor(i, rainbowPalette[paletteIndex], rainbowPalette[paletteIndex + 1], rainbowPalette[paletteIndex + 2]);
-    //setPixelColor(i, rainbowPalette[0], rainbowPalette[1], rainbowPalette[2]);
-  }
-
-    return FRAMETIME;
-/*
-        Adafruit_NeoPixel::Color(255,0,0), // R
-      Adafruit_NeoPixel::Color(0,0,255), // B
-      Adafruit_NeoPixel::Color(255,128,0), // Y
-      Adafruit_NeoPixel::Color(178,0,255), // V
-      Adafruit_NeoPixel::Color(255,55,0), // O
-      Adafruit_NeoPixel::Color(0,255,0) // G
-
-*/
-
   uint16_t lit = 1 + SEGMENT.speed;
   uint16_t unlit = 1 + SEGMENT.intensity;
   bool drawingLit = true;

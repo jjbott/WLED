@@ -445,6 +445,8 @@ void WLED::setup()
       DEBUG_PRINTLN(F("Start ArduinoOTA"));
     });
     ArduinoOTA.onError([](ota_error_t error) {
+
+      DEBUG_PRINTF("%i", error);
       // reenable watchdog on failed update
       WLED::instance().enableWatchdog();
     });
@@ -698,6 +700,7 @@ void WLED::initInterfaces()
 
 #ifndef WLED_DISABLE_OTA
   if (aOtaEnabled)
+    DEBUG_PRINTLN(F("ArduinoOTA started"));
     ArduinoOTA.begin();
 #endif
 
